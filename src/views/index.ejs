@@ -294,12 +294,23 @@
       messageDiv.prepend(image);
 
       responseDiv.appendChild(messageDiv);
+      // Scroll down to the latest message
+  responseDiv.scrollTop = responseDiv.scrollHeight;
     }
 
 
     // Function to call the chat API
     async function callChatAPI() {
       try {
+
+        // Disable input field and change submit button icon to dot
+      const questionInput = document.getElementById("question");
+      questionInput.disabled = true;
+
+      const submitButton = document.querySelector(".chat-submit-button");
+      submitButton.innerHTML = "<i class='bi bi-three-dots'></i>";
+      submitButton.disabled = true;
+
         // Get the chat ID from local storage
         let chatId = localStorage.getItem('chatId');
 
@@ -331,6 +342,11 @@
 
         // Append the bot's response to the response
         appendMessageToResponse('bot', data.answer);
+
+        // Enable input field and change submit button icon back to send icon
+      questionInput.disabled = false;
+      submitButton.innerHTML = "<i class='bi bi-send'></i>";
+      submitButton.disabled = false;
 
       } catch (error) {
         console.error("Error submitting question:", error);
