@@ -119,9 +119,14 @@
     }
 
     .chat-header {
-      background-color: #303030;
+      background-color: #561f7a;
       border-top-left-radius: 30px;
       border-top-right-radius: 30px;
+    }
+
+    .chat-header img {
+      height: 50px;
+      width: 50px;
     }
 
     .chat-container {
@@ -140,11 +145,17 @@
       font-size: 14px;
     }
 
+    .header-title {
+      font-family: "Poppins", sans-serif;
+      color: #fff;
+      font-size: 22px;
+    }
+
     .language-buttons button {
       font-family: "Poppins", sans-serif;
       font-size: 14px;
       border-radius: 15px;
-      background-color: #A90e09;
+      background-color: #561f7a;
       border: none;
       color: #fff;
       width: 100%;
@@ -180,36 +191,35 @@
         padding-top: 0px;
       }
     }
+
+    .langImage {
+      width: 100%;
+      height: auto;
+    }
+    #questionButtons button{
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 
 <body class="background">
   <div class="container my-0 p-0">
     <div class="d-flex chat-header w-100 py-2 text-center">
-      <img src="../chat-top-bar.webp" alt="" class="px-3 py-2">
+      <!-- <img src="../Asset-1-2.png" alt="" class="px-3 py-2"> -->
+      <p class="text-white header-title px-3 mb-0">Raja jewellers</p>
     </div>
 
     <div class="d-flex chat-container">
       <div id="response" class="">
         <div class="d-flex justify-content-center align-items-center">
-          <img src="../chat-logo.webp" alt="" class="px-3 py-2 mb-3">
+          <img src="../Asset-1-2.png" alt="" class="px-3 py-2 mb-3">
         </div>
-        <div class="bot-message"><img class="message-image" src="/chat-header.webp">
+        <div class="bot-message"><img class="message-image" src="/chat-header.png">
           <div>
-            <img src="../language-img.webp" alt="" class="px-3 py-2 mb-3 img-fluid">
-            <p class="mb-2">Hello, Welcome to DFCC Bank. Please select the language to get started.</p>
-            <p class="mb-2">ආයුබෝවන්, DFCC බැංකුව වෙත ඔබව සාදරයෙන් පිළිගනිමු. කරුණාකර ආරම්භ කිරීමට භාෂාව තෝරන්න.</p>
-            <p class="mb-2">வணக்கம், DFCC வங்கிக்கு வரவேற்கிறோம். தொடங்குவதற்கு மொழியைத் தேர்ந்தெடுக்கவும்.</p>
-            <span class="d-flex flex-row language-buttons w-100 p-0 m-0">
-              <span class="col-4 pe-1">
-                <button>English</button>
-              </span>
-              <span class="col-4 pe-1">
-                <button>Sinhala</button>
-              </span>
-              <span class="col-4">
-                <button>Tamil</button>
-              </span>
+            <img src="../language-img.png" alt="" class="px-3 py-2 mb-3 img-fluid langImage">
+            <p class="mb-2">Hello, Welcome to Raja jewellers.</p>
+            <span id="questionButtons" class="d-flex flex-column language-buttons w-100 p-0 m-0">
+
             </span>
           </div>
         </div>
@@ -223,23 +233,40 @@
   </div>
 
 
-  <script>
-    // Initialize the chat history variable
-    let chatHistory = [];
-    
 
-    // Function to append a message to the response div
+  <script>
+    var quickQuestions = [
+      "How do I open a bank account?",
+      "What are the interest rates for savings accounts?",
+      "How can I apply for a loan?",
+      "How do I report a lost or stolen card?",
+      "What are the bank's working hours?",
+    ];
+
+    
+    var questionButtonsContainer = document.getElementById("questionButtons");
+
+    quickQuestions.forEach(function(question) {
+      var button = document.createElement("button");
+      button.textContent = question;
+      questionButtonsContainer.appendChild(button);
+    });
+  </script>
+
+
+  <script>
+    let chatHistory = [];
+
+
     function appendMessageToResponse(role, content) {
       const responseDiv = document.getElementById("response");
       const messageDiv = document.createElement("div");
       messageDiv.classList.add(role === 'user' ? "user-message" : "bot-message");
 
-      // Create an image element for the message
       const image = document.createElement("img");
       image.classList.add("message-image");
-      image.src = role === 'user' ? "/user.webp" : "/chat-header.webp"; // Replace with actual image URLs
+      image.src = role === 'user' ? "/user.webp" : "/chat-header.webp"; 
 
-      // Use innerHTML to allow HTML formatting in the message
       messageDiv.innerHTML = `<div>${content}</div>`;
       messageDiv.prepend(image);
 
@@ -254,18 +281,15 @@
 
 
       try {
-        // Add the user's question to the chat history
         chatHistory.push({ role: 'user', content: question });
 
-        // Display the user's message immediately
         appendMessageToResponse('user', question);
-        // console.log("local chat id : ", chatId)
         let chatId = localStorage.getItem('chatId');
-    console.log("generated chat id : ", chatId)
+        console.log("generated chat id : ", chatId)
+
         const requestBody = {
           messages: chatHistory,
-          chatId: chatId,
-          language: 'en'
+          chatId: chatId
         };
 
         console.log("requestBody : ", requestBody)
@@ -279,20 +303,16 @@
 
         const data = await response.json();
 
-        // Update the chat history for future interactions
         chatHistory = data.chatHistory || [];
         // console.log(chatHistory);
         console.log("chatId : ", data.chatId);
 
         if (!localStorage.getItem('chatId')) {
           localStorage.setItem('chatId', data.chatId);
-          
-        }
-        
-        // Display the bot's response in HTML format
-        appendMessageToResponse('bot', data.answer);
 
-        // Clear the question input
+        }
+
+        appendMessageToResponse('bot', data.answer);
         questionInput.value = '';
 
       } catch (error) {
