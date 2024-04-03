@@ -21,7 +21,7 @@ export const chatResponse = async (req: RequestWithChatId, res: Response) => {
 
     console.log("req : ", req.body.chatId)
     const index = pc.index("dfccchatbot");
-    const namespace = index.namespace('pinecone-gpt-test')
+    const namespace = index.namespace('raja-jewellers-data-test')
     //pinecone-gpt-test
 
     let userChatId = req.body.chatId || "";
