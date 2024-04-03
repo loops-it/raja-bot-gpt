@@ -14,7 +14,7 @@
   ],
   "functions": {
     "src/server.ts": {
-      "maxDuration": 3000
+      "maxDuration": 300
     }
   }
 }
