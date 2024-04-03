@@ -21,7 +21,7 @@ export const chatResponse = async (req: RequestWithChatId, res: Response) => {
 
     console.log("req : ", req.body.chatId)
     const index = pc.index("dfccchatbot");
-    const namespace = index.namespace('raja-jewellers-data-test')
+    const namespace = index.namespace('raja-test-pdf-upload-new')
     //raja-test-pdf-upload-new
 
     let userChatId = req.body.chatId || "";
@@ -164,7 +164,7 @@ Standalone question:`
                 }
             });
             let context = results.join('\n');
-            // console.log("CONTEXT : ", context);
+            console.log("CONTEXT : ", context);
 
 
 
