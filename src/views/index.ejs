@@ -45,9 +45,9 @@
     .bot-message div {
       border: solid 1px #3d3d3d;
       border-radius: 30px;
-      max-width: 80%;
+      max-width: 83%;
       width: max-content;
-      padding: 10px;
+      padding: 8px;
       border-bottom-left-radius: 0px;
       font-size: 14px;
     }
@@ -290,12 +290,32 @@
       image.classList.add("message-image");
       image.src = role === 'user' ? "/user.webp" : "/chat-header.png";
 
-      messageDiv.innerHTML = `<div>${content}</div>`;
-      messageDiv.prepend(image);
+  //     messageDiv.innerHTML = `<div>${content}</div>`;
+  //     messageDiv.prepend(image);
 
-      responseDiv.appendChild(messageDiv);
-      // Scroll down to the latest message
-  responseDiv.scrollTop = responseDiv.scrollHeight;
+  //     responseDiv.appendChild(messageDiv);
+  //     // Scroll down to the latest message
+  // responseDiv.scrollTop = responseDiv.scrollHeight;
+  // Check if the content is a list
+  const listRegex = /^\d+\.\s.*$/gm;
+
+    const isList = listRegex.test(content);
+
+    // If it's a list, format it as an unordered list
+    if (isList) {
+        const listItems = content.split('\n').map(item => {
+            return `<li style="margin-bottom: 10px !important;">${item}</li>`;
+        }).join('');
+        messageDiv.innerHTML = `<div><ul style="list-style: none; padding: 0px !important">${listItems}</ul></div>`;
+    } else {
+        messageDiv.innerHTML = `<div>${content}</div>`;
+    }
+
+    messageDiv.prepend(image);
+
+    responseDiv.appendChild(messageDiv);
+    // Scroll down to the latest message
+    responseDiv.scrollTop = responseDiv.scrollHeight;
     }
 
 

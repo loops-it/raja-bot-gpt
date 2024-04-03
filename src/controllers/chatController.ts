@@ -90,16 +90,6 @@ export const chatResponse = async (req: RequestWithChatId, res: Response) => {
             const chatHistoryString = JSON.stringify(filteredChatHistory);
 
 
-            // If the question does not mentioned about what it is refering to, use conversation to give additional insight to the question.
-            
-            // If the question does not mentioned about what it is refering to, use conversation to give additional insight to the question, for example which loan it is refering to=======================================================================
-//             const questionRephrasePrompt = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question. If the question does not mentioned about what it is refering to, use conversation to give additional insight to the question, for example which loan it is refering to.  
-// ----------
-// CHAT HISTORY: {${chatHistoryString}}
-// ----------
-// FOLLOWUP QUESTION: {${userQuestion}}
-// ----------
-// Standalone question:`
 
 const questionRephrasePrompt = `As a senior banking assistant, kindly assess whether the FOLLOWUP QUESTION related to the CHAT HISTORY or if it introduces a new question. If the FOLLOWUP QUESTION is unrelated, refrain from rephrasing it. However, if it is related, please rephrase it as an independent query utilizing relevent keywords from the CHAT HISTORY, even if it is a question related to the calculation.
 ----------
@@ -108,9 +98,6 @@ CHAT HISTORY: {${chatHistoryString}}
 FOLLOWUP QUESTION: {${userQuestion}}
 ----------
 Standalone question:`
-
-// As a senior banking assistant, kindly assess whether the follow-up question pertains to the ongoing conversation or if it introduces a new topic. If the follow-up question is unrelated, refrain from rephrasing it. However, if it is related, please rephrase it as an independent query utilizing pertinent keywords from the conversation history.
-            // =======================================================================
             
 
 
@@ -164,7 +151,7 @@ Standalone question:`
                 }
             });
             let context = results.join('\n');
-            console.log("CONTEXT : ", context);
+            // console.log("CONTEXT : ", context);
 
 
 
@@ -192,32 +179,32 @@ Standalone question:`
         });
 
         let botResponse = completion.choices[0].message.content
-        // console.log("GPT : ", botResponse);
+        console.log("GPT : ", botResponse);
 
-        // if (botResponse === "I'm sorry.. information not provided."){
-        //     console.log("run again .....")
-        //     console.log("Run again with kValue = 3...");
+       // Check if botResponse is not null and not undefined
+if (botResponse != null && botResponse !== undefined) {
+    // Regular expression to match a list
+    const listRegex = /^\d+\.\s.*$/gm;
 
-        //     await handleSearchRequest(userQuestion, 3);
-            
-        //     const completion = await openai.chat.completions.create({
-        //         model: "gpt-4",
-        //         messages: chatHistory,
-        //         max_tokens: 150,
-        //         temperature: 0
-        //     });
-    
-        //     let botResponse = completion.choices[0].message.content
-        //     console.log(" second try bot response : ", botResponse)
-        //     // add assistant to array
-        //     chatHistory.push({ role: 'assistant', content: botResponse });
-
-        //     console.log(" send chat id : ", userChatId)
-        //     // }
-        //     // await processRequest(userQuestion, userChatId);
-
-        //     res.json({ answer: botResponse, chatHistory: chatHistory, chatId: userChatId });
-        // } else{
+    // Check if botResponse contains a list
+    if (listRegex.test(botResponse)) {
+        console.log("List detected. Here's the list:");
+        // Split botResponse by newline characters
+        const lines = botResponse.split('\n');
+        // Iterate over each line
+        lines.forEach(line => {
+            // If the line matches the list regex, print it
+            if (listRegex.test(line)) {
+                console.log(line);
+            }
+        });
+    } else {
+        console.log("No list detected in the bot response.");
+    }
+} else {
+    console.log("botResponse is null or undefined.");
+}
+   
 
             // add assistant to array
             chatHistory.push({ role: 'assistant', content: botResponse });
@@ -237,7 +224,6 @@ Standalone question:`
             );
 
             res.json({ answer: botResponse, chatHistory: chatHistory, chatId: userChatId });
-        // }
 
         
 
@@ -290,89 +276,3 @@ Standalone question:`
 
 
 
-
-
-
-// const questionRephrasePrompt = `Follow these steps to answer the user queries.
-
-// Step 1: First find out followup question is referring to based on what conversation topic.
-
-// step 2: rephrase the follow up question to be a standalone question with the conversation topic. 
-
-// ----------
-// CHAT HISTORY: {${chatHistoryString}}
-// ----------
-// FOLLOWUP QUESTION: {${userQuestion}}
-// ----------
-// Standalone question:`
-
-
-
-
-
-
-
-
-// const fileIds  = await File.findAll({
-            //     attributes: ['file_id']
-            //   });
-
-            //   const ids = fileIds.map(file => file.file_id);
-            // const fetchResult = await index.namespace('raja-test-pdf-upload-new').fetch(ids);
-            // const documents = Object.values(fetchResult.records).map(record => {
-            //     if (record.metadata) {
-            //         return record.metadata.Title;
-            //     }
-            //     return null;
-            // }).filter(title => title !== null); 
-            
-            // console.log(documents);
-
-            // =======================================================================
-//             const questionRephrasePrompt = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question. 
-// ----------
-// CHAT HISTORY: {${chatHistoryString}}
-// ----------
-// FOLLOWUP QUESTION: {${userQuestion}}
-// ----------
-// Standalone question:`
-// =======================================================================
-
-// const questionRephrasePrompt = `Given the following conversation and a follow up question, rephrase the follow up question with a insight regarding the topic discussed to be a standalone question. 
-// ----------
-// CHAT HISTORY: {${chatHistoryString}}
-// ----------
-// FOLLOWUP QUESTION: {${userQuestion}}
-// ----------
-// Standalone question:`
-
-// Give insight regarding the topic discussed.
-// const questionRephrasePrompt = `Given the following conversation and a follow up question, Give insight regarding the topic discussed. 
-// ----------
-// CHAT HISTORY: {${chatHistoryString}}
-// ----------
-// FOLLOWUP QUESTION: {${userQuestion}}
-// ----------
-// TOPIC:`
-            
-
-
-
-
-
-
-
-
-
-// get streaming data into a variable
-// let contentArray = [];
-// for await (const chunk of completion) {
-//   contentArray.push(chunk.choices[0].delta.content);
-// }
-// const chatTextHistory = contentArray.join('');
-
-
-// const randomString = Math.random().toString(36).substring(2, 15);
-// const prefix = 'chat';
-// userChatId = `${prefix}_${randomString}`;
-// console.log("Generated chat id : ", userChatId);
