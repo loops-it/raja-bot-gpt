@@ -22,7 +22,7 @@ export const chatResponse = async (req: RequestWithChatId, res: Response) => {
     console.log("req : ", req.body.chatId)
     const index = pc.index("dfccchatbot");
     const namespace = index.namespace('raja-jewellers-data-test')
-    //pinecone-gpt-test
+    //raja-test-pdf-upload-new
 
     let userChatId = req.body.chatId || "";
 
@@ -318,7 +318,7 @@ Standalone question:`
             //   });
 
             //   const ids = fileIds.map(file => file.file_id);
-            // const fetchResult = await index.namespace('pinecone-gpt-test').fetch(ids);
+            // const fetchResult = await index.namespace('raja-test-pdf-upload-new').fetch(ids);
             // const documents = Object.values(fetchResult.records).map(record => {
             //     if (record.metadata) {
             //         return record.metadata.Title;
