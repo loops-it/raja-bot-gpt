@@ -222,6 +222,7 @@
             <span id="questionButtons" class="d-flex flex-column language-buttons w-100 p-0 m-0">
 
             </span>
+
           </div>
         </div>
       </div>
@@ -236,36 +237,43 @@
 
 
   <script>
-      <% for (var i = 0; i < questions.length; i++) { %>
-        console.log("<%= questions[i].question %>");
-        console.log("<%= questions[i].answer %>");
-      <% } %>
-    var quickQuestions = [
-      { question: "Where are you located at?", answer: "We are located at XYZ street, ABC city." },
-      { question: "What are your opening hours?", answer: "Our opening hours are from 9 AM to 6 PM, Monday to Friday." },
-      { question: "I'm not in Sri Lanka, I need to get some details?", answer: "Sure! We can assist you with your inquiries. Please provide us with the details you need." },
-      { question: "Do you do custom-made jewelry?", answer: "Yes, we offer custom-made jewelry services tailored to your preferences." },
-      { question: "Can I get a quotation for a custom-made jewelry?", answer: "Certainly! Please provide us with the details of your requirements, and we'll provide you with a quotation." },
-    ];
+
+
+
+    // var quickQuestions = [
+    //   { question: "Where are you located at?", answer: "We are located at XYZ street, ABC city." },
+    //   { question: "What are your opening hours?", answer: "Our opening hours are from 9 AM to 6 PM, Monday to Friday." },
+    //   { question: "I'm not in Sri Lanka, I need to get some details?", answer: "Sure! We can assist you with your inquiries. Please provide us with the details you need." },
+    //   { question: "Do you do custom-made jewelry?", answer: "Yes, we offer custom-made jewelry services tailored to your preferences." },
+    //   { question: "Can I get a quotation for a custom-made jewelry?", answer: "Certainly! Please provide us with the details of your requirements, and we'll provide you with a quotation." },
+    // ];
+
+    var quickQuestions = [];
+  <% for (var i = 0; i < questions.length; i++) { %>
+    quickQuestions.push({
+      question: "<%= questions[i].question %>",
+      answer: "<%= questions[i].answer %>"
+    });
+  <% } %>
 
 
     var questionButtonsContainer = document.getElementById("questionButtons");
 
-    quickQuestions.forEach(function(qa) {
-    var button = document.createElement("button");
-    button.textContent = qa.question;
-    button.addEventListener("click", function() {
+    quickQuestions.forEach(function (qa) {
+      var button = document.createElement("button");
+      button.textContent = qa.question;
+      button.addEventListener("click", function () {
 
-      // Add the clicked question as a user message to the chat history
-      chatHistory.push({ role: 'user', content: qa.question });
-      
-      // Display the user's question
-      appendMessageToResponse('user', qa.question);
-      // Display the corresponding answer
-      appendMessageToResponse('bot', qa.answer);
+        // Add the clicked question as a user message to the chat history
+        chatHistory.push({ role: 'user', content: qa.question });
+
+        // Display the user's question
+        appendMessageToResponse('user', qa.question);
+        // Display the corresponding answer
+        appendMessageToResponse('bot', qa.answer);
+      });
+      questionButtonsContainer.appendChild(button);
     });
-    questionButtonsContainer.appendChild(button);
-  });
   </script>
 
 
