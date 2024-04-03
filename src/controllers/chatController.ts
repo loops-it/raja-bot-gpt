@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import { Pinecone } from '@pinecone-database/pinecone'
 import "dotenv/config";
 import { Request as ExpressRequest, Response } from 'express';
-import File from '../../models/File';
+import BotChats from '../../models/BotChats';
 
 
 
@@ -63,6 +63,16 @@ export const chatResponse = async (req: RequestWithChatId, res: Response) => {
             }
         }
         // console.log("userQuestion : ", userQuestion)
+
+        await BotChats.create(
+            { 
+            message_id: userChatId,
+            language: 'English',
+            message: userQuestion,
+            message_sent_by: 'customer',
+            viewed_by_admin: 'no',
+            },
+        );
 
 
         let kValue = 2
@@ -215,6 +225,16 @@ Standalone question:`
             // console.log(" send chat id : ", userChatId)
             // }
             // await processRequest(userQuestion, userChatId);
+
+            await BotChats.create(
+                { 
+                message_id: userChatId,
+                language: 'English',
+                message: botResponse,
+                message_sent_by: 'bot',
+                viewed_by_admin: 'no',
+                },
+            );
 
             res.json({ answer: botResponse, chatHistory: chatHistory, chatId: userChatId });
         // }
