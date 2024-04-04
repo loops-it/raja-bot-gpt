@@ -101,7 +101,7 @@ export const chatResponse = async (req: RequestWithChatId, res: Response) => {
 
             // console.log("filtered history : ", filteredChatHistory)
 
-            const questionRephrasePrompt = `As a senior banking assistant, kindly assess whether the FOLLOWUP QUESTION related to the CHAT HISTORY or if it introduces a new question. If the FOLLOWUP QUESTION is unrelated, refrain from rephrasing it. However, if it is related, please rephrase it as an independent query utilizing relevent keywords from the CHAT HISTORY, even if it is a question related to the calculation.
+            const questionRephrasePrompt = `As a senior banking assistant, kindly assess whether the FOLLOWUP QUESTION related to the CHAT HISTORY or if it introduces a new question. If the FOLLOWUP QUESTION is unrelated, refrain from rephrasing it. However, if it is related, please rephrase it as an independent query utilizing relevent keywords from the CHAT HISTORY, even if it is a question related to the calculation. If the user asks for information like email or address, provide Raja Jewellers' email and address.
 ----------
 CHAT HISTORY: {${chatHistoryString}}
 ----------
@@ -171,7 +171,7 @@ Standalone question:`
             if (chatHistory.length === 0 || chatHistory[0].role !== 'system') {
                 chatHistory.unshift({ role: 'system', content: '' });
             }
-            chatHistory[0].content = `You are a helpful assistant and you are friendly. Your name is Raja Jewellers GPT. Answer user question Only based on given Context: ${context}, your answer must be less than 150 words. If it has math question relevent to given Context give calculated answer, If user question is not relevent to the Context just say "Sorry. This information is not available at the moment. Please feel free to contact us via (+94) 112 583223 or (+94) 112 595655 ". Do NOT make up any answers and questions not relevant to the context using public information.`;
+            chatHistory[0].content = `You are a helpful assistant and you are friendly. Your name is Raja Jewellers GPT. Answer user question Only based on given Context: ${context}, your answer must be less than 150 words. If the user asks for information like email or address, you'll provide Raja Jewellers' email and address. If it has math question relevent to given Context give calculated answer, If user question is not relevent to the Context just say "Sorry. This information is not available at the moment. Please feel free to contact us via (+94) 112 583223 or (+94) 112 595655 ". Do NOT make up any answers and questions not relevant to the context using public information.`;
             // console.log("Frontend Question : ", chatHistory);
         }
 
