@@ -20,6 +20,7 @@ interface RequestWithChatId extends ExpressRequest {
 export const chatResponse = async (req: RequestWithChatId, res: Response) => {
 
     console.log("req : ", req.body.chatId)
+    console.log("req : ", req.body.messages || [])
     const index = pc.index("dfccchatbot");
     const namespace = index.namespace('raja-test-pdf-upload-new')
     //raja-test-pdf-upload-new
@@ -65,12 +66,12 @@ export const chatResponse = async (req: RequestWithChatId, res: Response) => {
         // console.log("userQuestion : ", userQuestion)
 
         await BotChats.create(
-            { 
-            message_id: userChatId,
-            language: 'English',
-            message: userQuestion,
-            message_sent_by: 'customer',
-            viewed_by_admin: 'no',
+            {
+                message_id: userChatId,
+                language: 'English',
+                message: userQuestion,
+                message_sent_by: 'customer',
+                viewed_by_admin: 'no',
             },
         );
 
@@ -80,25 +81,35 @@ export const chatResponse = async (req: RequestWithChatId, res: Response) => {
         //============= change context ======================
         async function handleSearchRequest(userQuestion: string, kValue: number) {
 
-        
+
 
             // ================================================================
             // STANDALONE QUESTION GENERATE
             // ================================================================
-            const filteredChatHistory = chatHistory.filter((item: { role: string; }) => item.role !== 'system');
+            // const filteredChatHistorySystem = chatHistory.filter((item: { role: string; }) => item.role !== 'system');
 
-            const chatHistoryString = JSON.stringify(filteredChatHistory);
+            // const chatHistoryString = JSON.stringify(filteredChatHistory);
 
+            
 
+            const filteredChatHistorySystem = chatHistory.filter((item: { role: string }) =>
+            item.role !== 'quickQuestion' && item.role !== 'quickAnswer' && item.role !== 'system'
+        );
+        
 
-const questionRephrasePrompt = `As a senior banking assistant, kindly assess whether the FOLLOWUP QUESTION related to the CHAT HISTORY or if it introduces a new question. If the FOLLOWUP QUESTION is unrelated, refrain from rephrasing it. However, if it is related, please rephrase it as an independent query utilizing relevent keywords from the CHAT HISTORY, even if it is a question related to the calculation.
+            const chatHistoryString = JSON.stringify(filteredChatHistorySystem);
+
+            // console.log("filtered history : ", filteredChatHistory)
+
+            const questionRephrasePrompt = `As a senior banking assistant, kindly assess whether the FOLLOWUP QUESTION related to the CHAT HISTORY or if it introduces a new question. If the FOLLOWUP QUESTION is unrelated, refrain from rephrasing it. However, if it is related, please rephrase it as an independent query utilizing relevent keywords from the CHAT HISTORY, even if it is a question related to the calculation.
 ----------
 CHAT HISTORY: {${chatHistoryString}}
 ----------
 FOLLOWUP QUESTION: {${userQuestion}}
 ----------
 Standalone question:`
-            
+
+
 
 
 
@@ -160,7 +171,7 @@ Standalone question:`
             if (chatHistory.length === 0 || chatHistory[0].role !== 'system') {
                 chatHistory.unshift({ role: 'system', content: '' });
             }
-            chatHistory[0].content = `You are a helpful assistant and you are friendly. Your name is Raja Jewellers GPT. Answer user question Only based on given Context: ${context}, your answer must be less than 150 words. If it has math question relevent to given Context give calculated answer, If user question is not relevent to the Context just say "I'm sorry.. no information documents found for data retrieval.". Do NOT make up any answers and questions not relevant to the context using public information.`;
+            chatHistory[0].content = `You are a helpful assistant and you are friendly. Your name is Raja Jewellers GPT. Answer user question Only based on given Context: ${context}, your answer must be less than 150 words. If it has math question relevent to given Context give calculated answer, If user question is not relevent to the Context just say "Sorry. This information is not available at the moment. Please feel free to contact us via (+94) 112 583223 or (+94) 112 595655 ". Do NOT make up any answers and questions not relevant to the context using public information.`;
             // console.log("Frontend Question : ", chatHistory);
         }
 
@@ -170,10 +181,13 @@ Standalone question:`
         await handleSearchRequest(userQuestion, kValue);
 
 
+        const filteredChatHistory = chatHistory.filter((item: { role: string }) =>
+    item.role !== 'quickQuestion' && item.role !== 'quickAnswer'
+);
         // GPT response ===========================
         const completion = await openai.chat.completions.create({
             model: "gpt-4",
-            messages: chatHistory,
+            messages: filteredChatHistory,
             max_tokens: 180,
             temperature: 0
         });
@@ -181,51 +195,45 @@ Standalone question:`
         let botResponse = completion.choices[0].message.content
         console.log("GPT : ", botResponse);
 
-       // Check if botResponse is not null and not undefined
-if (botResponse != null && botResponse !== undefined) {
-    // Regular expression to match a list
-    const listRegex = /^\d+\.\s.*$/gm;
+        if (botResponse != null && botResponse !== undefined) {
+            const listRegex = /^\d+\.\s.*$/gm;
 
-    // Check if botResponse contains a list
-    if (listRegex.test(botResponse)) {
-        console.log("List detected. Here's the list:");
-        // Split botResponse by newline characters
-        const lines = botResponse.split('\n');
-        // Iterate over each line
-        lines.forEach(line => {
-            // If the line matches the list regex, print it
-            if (listRegex.test(line)) {
-                console.log(line);
+            if (listRegex.test(botResponse)) {
+                console.log("List detected. Here's the list:");
+                const lines = botResponse.split('\n');
+                lines.forEach(line => {
+                    if (listRegex.test(line)) {
+                        console.log(line);
+                    }
+                });
+            } else {
+                console.log("No list detected in the bot response.");
             }
-        });
-    } else {
-        console.log("No list detected in the bot response.");
-    }
-} else {
-    console.log("botResponse is null or undefined.");
-}
-   
+        } else {
+            console.log("botResponse is null or undefined.");
+        }
 
-            // add assistant to array
-            chatHistory.push({ role: 'assistant', content: botResponse });
 
-            // console.log(" send chat id : ", userChatId)
-            // }
-            // await processRequest(userQuestion, userChatId);
+        // add assistant to array
+        chatHistory.push({ role: 'assistant', content: botResponse });
 
-            await BotChats.create(
-                { 
+        // console.log(" send chat id : ", userChatId)
+        // }
+        // await processRequest(userQuestion, userChatId);
+
+        await BotChats.create(
+            {
                 message_id: userChatId,
                 language: 'English',
                 message: botResponse,
                 message_sent_by: 'bot',
                 viewed_by_admin: 'no',
-                },
-            );
+            },
+        );
 
-            res.json({ answer: botResponse, chatHistory: chatHistory, chatId: userChatId });
+        res.json({ answer: botResponse, chatHistory: chatHistory, chatId: userChatId });
 
-        
+
 
     } catch (error) {
         console.error("Error processing question:", error);

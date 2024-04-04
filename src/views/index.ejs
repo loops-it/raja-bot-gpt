@@ -236,24 +236,17 @@
 
 
 
+
+
   <script>
 
 
-
-    // var quickQuestions = [
-    //   { question: "Where are you located at?", answer: "We are located at XYZ street, ABC city." },
-    //   { question: "What are your opening hours?", answer: "Our opening hours are from 9 AM to 6 PM, Monday to Friday." },
-    //   { question: "I'm not in Sri Lanka, I need to get some details?", answer: "Sure! We can assist you with your inquiries. Please provide us with the details you need." },
-    //   { question: "Do you do custom-made jewelry?", answer: "Yes, we offer custom-made jewelry services tailored to your preferences." },
-    //   { question: "Can I get a quotation for a custom-made jewelry?", answer: "Certainly! Please provide us with the details of your requirements, and we'll provide you with a quotation." },
-    // ];
-
     var quickQuestions = [];
   <% for (var i = 0; i < questions.length; i++) { %>
-    quickQuestions.push({
-      question: "<%= questions[i].question %>",
-      answer: "<%= questions[i].answer %>"
-    });
+      quickQuestions.push({
+        question: "<%= questions[i].question %>",
+        answer: "<%= questions[i].answer %>"
+      });
   <% } %>
 
 
@@ -265,58 +258,62 @@
       button.addEventListener("click", function () {
 
         // Add the clicked question as a user message to the chat history
-        chatHistory.push({ role: 'user', content: qa.question });
+        chatHistory.push({ role: 'quickQuestion', content: qa.question });
 
         // Display the user's question
-        appendMessageToResponse('user', qa.question);
+        appendMessageToResponse('quickQuestion', qa.question);
         // Display the corresponding answer
-        appendMessageToResponse('bot', qa.answer);
+        appendMessageToResponse('quickAnswer', qa.answer);
       });
       questionButtonsContainer.appendChild(button);
     });
-  </script>
 
 
-  <script>
+
     let chatHistory = [];
 
 
     function appendMessageToResponse(role, content) {
-      const responseDiv = document.getElementById("response");
-      const messageDiv = document.createElement("div");
-      messageDiv.classList.add(role === 'user' ? "user-message" : "bot-message");
+        const responseDiv = document.getElementById("response");
+        const messageDiv = document.createElement("div");
 
-      const image = document.createElement("img");
-      image.classList.add("message-image");
-      image.src = role === 'user' ? "/user.webp" : "/chat-header.png";
+        if (role === 'quickQuestion') {
+            messageDiv.classList.add("user-message"); // Apply user message style
+        } else if (role === 'quickAnswer') {
+            messageDiv.classList.add("bot-message"); // Apply bot message style
+        } else {
+            messageDiv.classList.add(role === 'user' ? "user-message" : "bot-message");
+        }
 
-  //     messageDiv.innerHTML = `<div>${content}</div>`;
-  //     messageDiv.prepend(image);
+        const image = document.createElement("img");
+        image.classList.add("message-image");
+        if (role === 'quickQuestion' || role === 'user') {
+            image.src = "/user.webp"; // Set user image
+        } else {
+            image.src = "/chat-header.png"; // Set bot image
+        }
 
-  //     responseDiv.appendChild(messageDiv);
-  //     // Scroll down to the latest message
-  // responseDiv.scrollTop = responseDiv.scrollHeight;
-  // Check if the content is a list
-  const listRegex = /^\d+\.\s.*$/gm;
+        // Check if the content is a list
+        const listRegex = /^\d+\.\s.*$/gm;
+        const isList = listRegex.test(content);
 
-    const isList = listRegex.test(content);
+        // If it's a list, format it as an unordered list
+        if (isList) {
+            const listItems = content.split('\n').map(item => {
+                return `<li style="margin-bottom: 10px !important;">${item}</li>`;
+            }).join('');
+            messageDiv.innerHTML = `<div><ul style="list-style: none; padding: 0px !important">${listItems}</ul></div>`;
+        } else {
+            messageDiv.innerHTML = `<div>${content}</div>`;
+        }
 
-    // If it's a list, format it as an unordered list
-    if (isList) {
-        const listItems = content.split('\n').map(item => {
-            return `<li style="margin-bottom: 10px !important;">${item}</li>`;
-        }).join('');
-        messageDiv.innerHTML = `<div><ul style="list-style: none; padding: 0px !important">${listItems}</ul></div>`;
-    } else {
-        messageDiv.innerHTML = `<div>${content}</div>`;
+        messageDiv.prepend(image);
+
+        responseDiv.appendChild(messageDiv);
+        // Scroll down to the latest message
+        responseDiv.scrollTop = responseDiv.scrollHeight;
     }
 
-    messageDiv.prepend(image);
-
-    responseDiv.appendChild(messageDiv);
-    // Scroll down to the latest message
-    responseDiv.scrollTop = responseDiv.scrollHeight;
-    }
 
 
     // Function to call the chat API
@@ -324,12 +321,12 @@
       try {
 
         // Disable input field and change submit button icon to dot
-      const questionInput = document.getElementById("question");
-      questionInput.disabled = true;
+        const questionInput = document.getElementById("question");
+        questionInput.disabled = true;
 
-      const submitButton = document.querySelector(".chat-submit-button");
-      submitButton.innerHTML = "<i class='bi bi-three-dots'></i>";
-      submitButton.disabled = true;
+        const submitButton = document.querySelector(".chat-submit-button");
+        submitButton.innerHTML = "<i class='bi bi-three-dots'></i>";
+        submitButton.disabled = true;
 
         // Get the chat ID from local storage
         let chatId = localStorage.getItem('chatId');
@@ -364,9 +361,9 @@
         appendMessageToResponse('bot', data.answer);
 
         // Enable input field and change submit button icon back to send icon
-      questionInput.disabled = false;
-      submitButton.innerHTML = "<i class='bi bi-send'></i>";
-      submitButton.disabled = false;
+        questionInput.disabled = false;
+        submitButton.innerHTML = "<i class='bi bi-send'></i>";
+        submitButton.disabled = false;
 
       } catch (error) {
         console.error("Error submitting question:", error);
