@@ -40,16 +40,20 @@
       display: flex;
       align-items: end;
       font-family: "Poppins", sans-serif;
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: start;
+      align-items: start;
     }
 
     .bot-message div {
       border: solid 1px #3d3d3d;
       border-radius: 30px;
-      max-width: 83%;
+      max-width: 100%;
       width: max-content;
       padding: 8px;
       border-bottom-left-radius: 0px;
-      font-size: 14px;
+      font-size: 12px;
     }
 
     .user-message {
@@ -62,17 +66,21 @@
       flex-direction: row-reverse;
       align-items: end;
       font-family: "Poppins", sans-serif;
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: end;
+      align-items: end;
     }
 
     .user-message div {
       border: solid 1px #3d3d3d;
       border-radius: 30px;
-      max-width: 80%;
+      max-width: 90%;
       width: max-content;
       padding: 10px 20px;
       border-bottom-right-radius: 0px;
       margin-right: 10px;
-      font-size: 14px;
+      font-size: 12px;
     }
 
     .background {
@@ -88,7 +96,7 @@
       overflow: auto;
       position: relative;
       font-family: "Poppins", sans-serif;
-      font-size: 14px;
+      font-size: 12px;
     }
 
     .message-image {
@@ -137,13 +145,13 @@
       line-height: 30px;
       border-radius: 30px;
       font-family: "Poppins", sans-serif;
-      font-size: 14px;
+      font-size: 12px;
       padding-right: 45px !important;
     }
 
     .chat-input::placeholder {
       font-family: "Poppins", sans-serif;
-      font-size: 14px;
+      font-size: 12px;
     }
 
     .header-title {
@@ -154,7 +162,7 @@
 
     .language-buttons button {
       font-family: "Poppins", sans-serif;
-      font-size: 14px;
+      font-size: 12px;
       border-radius: 15px;
       background-color: #561f7a;
       border: none;
@@ -275,44 +283,44 @@
 
 
     function appendMessageToResponse(role, content) {
-        const responseDiv = document.getElementById("response");
-        const messageDiv = document.createElement("div");
+      const responseDiv = document.getElementById("response");
+      const messageDiv = document.createElement("div");
 
-        if (role === 'quickQuestion') {
-            messageDiv.classList.add("user-message"); // Apply user message style
-        } else if (role === 'quickAnswer') {
-            messageDiv.classList.add("bot-message"); // Apply bot message style
-        } else {
-            messageDiv.classList.add(role === 'user' ? "user-message" : "bot-message");
-        }
+      if (role === 'quickQuestion') {
+        messageDiv.classList.add("user-message"); // Apply user message style
+      } else if (role === 'quickAnswer') {
+        messageDiv.classList.add("bot-message"); // Apply bot message style
+      } else {
+        messageDiv.classList.add(role === 'user' ? "user-message" : "bot-message");
+      }
 
-        const image = document.createElement("img");
-        image.classList.add("message-image");
-        if (role === 'quickQuestion' || role === 'user') {
-            image.src = "/user.webp"; // Set user image
-        } else {
-            image.src = "/chat-header.png"; // Set bot image
-        }
+      const image = document.createElement("img");
+      image.classList.add("message-image");
+      if (role === 'quickQuestion' || role === 'user') {
+        image.src = "/user.webp"; // Set user image
+      } else {
+        image.src = "/chat-header.png"; // Set bot image
+      }
 
-        // Check if the content is a list
-        const listRegex = /^\d+\.\s.*$/gm;
-        const isList = listRegex.test(content);
+      // Check if the content is a list
+      const listRegex = /^\d+\.\s.*$/gm;
+      const isList = listRegex.test(content);
 
-        // If it's a list, format it as an unordered list
-        if (isList) {
-            const listItems = content.split('\n').map(item => {
-                return `<li style="margin-bottom: 10px !important;">${item}</li>`;
-            }).join('');
-            messageDiv.innerHTML = `<div><ul style="list-style: none; padding: 0px !important">${listItems}</ul></div>`;
-        } else {
-            messageDiv.innerHTML = `<div>${content}</div>`;
-        }
+      // If it's a list, format it as an unordered list
+      if (isList) {
+        const listItems = content.split('\n').map(item => {
+          return `<li style="margin-bottom: 10px !important;">${item}</li>`;
+        }).join('');
+        messageDiv.innerHTML = `<div><ul style="list-style: none; padding: 0px !important">${listItems}</ul></div>`;
+      } else {
+        messageDiv.innerHTML = `<div>${content}</div>`;
+      }
 
-        messageDiv.prepend(image);
+      messageDiv.prepend(image);
 
-        responseDiv.appendChild(messageDiv);
-        // Scroll down to the latest message
-        responseDiv.scrollTop = responseDiv.scrollHeight;
+      responseDiv.appendChild(messageDiv);
+      // Scroll down to the latest message
+      responseDiv.scrollTop = responseDiv.scrollHeight;
     }
 
 
