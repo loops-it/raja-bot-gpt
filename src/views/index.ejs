@@ -247,6 +247,13 @@
       font-size: 25px;
       padding: 5px !important;
     }
+    .error-message{
+      background-color: #561f7a9c;
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px !important;
+      margin-top: 10px;
+    }
   </style>
 </head>
 
@@ -340,6 +347,19 @@
       if (typingMessage) {
         typingMessage.remove();
       }
+    }
+
+    // Function to handle errors
+    function handleErrorMessage(error) {
+      const responseDiv = document.getElementById("response");
+      let errorMessage = "<p class='error-message'>The allocated number of tokens are over, please ask the administrator to add more tokens to the system.</p>"; // Default error message
+
+      // Check if the error message matches the specific error condition
+      if (error.message === "The allocated number of tokens are over, please ask the administrator to add more tokens to the system.") {
+        errorMessage = "<p>The allocated number of tokens are over, please ask the administrator to add more tokens to the system.</p>";
+      }
+
+      responseDiv.innerHTML = errorMessage;
     }
 
 
@@ -443,8 +463,8 @@
 
       } catch (error) {
         console.error("Error submitting question:", error);
-        const responseDiv = document.getElementById("response");
-        responseDiv.innerHTML = "<p>An error occurred.</p>";
+        // Handle specific error message
+        handleErrorMessage(error);
       }
     }
 
