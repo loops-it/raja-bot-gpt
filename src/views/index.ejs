@@ -237,6 +237,16 @@
     .loading {
       animation: fadeIn 0.5s ease-in-out infinite alternate, visible 0.5s ease-in-out infinite alternate;
     }
+
+    .typingmsg-wrapper{
+      background-color: #fff;
+      color: #000;
+    }
+    .typing-msg{
+      color: #000;
+      font-size: 25px;
+      padding: 5px !important;
+    }
   </style>
 </head>
 
@@ -310,6 +320,29 @@
     let chatHistory = [];
 
 
+    // Function to append a typing animation message
+    function showTypingAnimation() {
+      const responseDiv = document.getElementById("response");
+      const typingMessage = document.createElement("div");
+      typingMessage.classList.add("bot-message");
+      typingMessage.innerHTML = `
+    <div class="typing-animation typingmsg-wrapper">
+      <i class="bi bi-three-dots loading typing-msg"></i>
+    </div>
+  `;
+      responseDiv.appendChild(typingMessage);
+      responseDiv.scrollTop = responseDiv.scrollHeight;
+    }
+
+    // Function to remove typing animation message
+    function hideTypingAnimation() {
+      const typingMessage = document.querySelector(".typing-animation");
+      if (typingMessage) {
+        typingMessage.remove();
+      }
+    }
+
+
     function appendMessageToResponse(role, content) {
       const responseDiv = document.getElementById("response");
       const messageDiv = document.createElement("div");
@@ -365,6 +398,9 @@
         submitButton.innerHTML = "<i class='bi bi-three-dots loading'></i>";
         submitButton.disabled = true;
 
+        // Show typing animation
+        showTypingAnimation();
+
         // Get the chat ID from local storage
         let chatId = localStorage.getItem('chatId');
 
@@ -396,6 +432,9 @@
 
         // Append the bot's response to the response
         appendMessageToResponse('bot', data.answer);
+
+        // Hide typing animation
+        hideTypingAnimation();
 
         // Enable input field and change submit button icon back to send icon
         questionInput.disabled = false;
