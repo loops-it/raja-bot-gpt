@@ -121,7 +121,7 @@ Standalone question:`
             });
 
             // console.log("chatHistory : ", chatHistory);
-            console.log("Standalone Question PROMPT :", questionRephrasePrompt)
+            // console.log("Standalone Question PROMPT :", questionRephrasePrompt)
             console.log("Standalone Question :", completionQuestion.choices[0].text)
 
 
