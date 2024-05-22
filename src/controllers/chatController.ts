@@ -90,12 +90,12 @@ export const chatResponse = async (req: RequestWithChatId, res: Response) => {
 
             // const chatHistoryString = JSON.stringify(filteredChatHistory);
 
-            
+
 
             const filteredChatHistorySystem = chatHistory.filter((item: { role: string }) =>
-            item.role !== 'quickQuestion' && item.role !== 'quickAnswer' && item.role !== 'system'
-        );
-        
+                item.role !== 'quickQuestion' && item.role !== 'quickAnswer' && item.role !== 'system'
+            );
+
 
             const chatHistoryString = JSON.stringify(filteredChatHistorySystem);
 
@@ -121,7 +121,7 @@ Standalone question:`
             });
 
             // console.log("chatHistory : ", chatHistory);
-            // console.log("Standalone Question PROMPT :", questionRephrasePrompt)
+            console.log("Standalone Question PROMPT :", questionRephrasePrompt)
             console.log("Standalone Question :", completionQuestion.choices[0].text)
 
 
@@ -162,7 +162,7 @@ Standalone question:`
                 }
             });
             let context = results.join('\n');
-            // console.log("CONTEXT : ", context);
+            console.log("CONTEXT : ", context);
 
 
 
@@ -182,8 +182,8 @@ Standalone question:`
 
 
         const filteredChatHistory = chatHistory.filter((item: { role: string }) =>
-    item.role !== 'quickQuestion' && item.role !== 'quickAnswer'
-);
+            item.role !== 'quickQuestion' && item.role !== 'quickAnswer'
+        );
         // GPT response ===========================
         const completion = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
