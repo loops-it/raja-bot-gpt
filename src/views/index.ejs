@@ -294,7 +294,7 @@
 
   <script>
 
-
+// quick questions ============================================================
     var quickQuestions = [];
   <% for (var i = 0; i < questions.length; i++) { %>
       quickQuestions.push({
@@ -321,7 +321,7 @@
       });
       questionButtonsContainer.appendChild(button);
     });
-
+// quick questions ============================================================
 
 
     let chatHistory = [];
@@ -367,6 +367,7 @@
       const responseDiv = document.getElementById("response");
       const messageDiv = document.createElement("div");
 
+      // quick questions ============================================================
       if (role === 'quickQuestion') {
         messageDiv.classList.add("user-message"); // Apply user message style
       } else if (role === 'quickAnswer') {
@@ -377,6 +378,7 @@
 
       const image = document.createElement("img");
       image.classList.add("message-image");
+      // quick questions ============================================================
       if (role === 'quickQuestion' || role === 'user') {
         image.src = "/user.webp"; // Set user image
       } else {
