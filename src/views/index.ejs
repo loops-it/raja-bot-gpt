@@ -22,7 +22,411 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
     integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
     crossorigin="anonymous"></script>
-  <style>
+    <style>
+      .container {
+          width: 360px;
+          position: absolute;
+          bottom: 10px;
+          right: 10px;
+          border: none;
+          border-radius: 8px;
+      }
+
+      .bot-message {
+          padding: 10px;
+          border-radius: 10px;
+          margin-bottom: 10px;
+          color: #595E62;
+          display: flex;
+          align-items: end;
+          font-family: "Poppins", sans-serif;
+          display: flex;
+          flex-direction: row;
+          justify-content: start;
+          align-items: start;
+      }
+
+      .bot-message .messageWrapper div {
+          border: none;
+          border-radius: 8px;
+          max-width: 280px;
+          /* width: max-content; */
+          padding: 10px;
+          border-top-left-radius: 0px;
+          font-size: 12px;
+          background-color: #561f7a;
+          color: #fff !important;
+          display: flex;
+          flex-direction: column;
+          /* box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); */
+      }
+
+      .user-message {
+          padding: 10px;
+          border-radius: 10px;
+          margin-bottom: 10px;
+          color: #595E62;
+          display: flex;
+          align-items: end;
+          font-family: "Poppins", sans-serif;
+          display: flex;
+          flex-direction: row-reverse;
+          justify-content: end;
+          align-items: end;
+      }
+
+      .user-message .messageWrapper div {
+          border: none;
+          border-radius: 10px;
+          max-width: 250px;
+          width: max-content;
+          padding: 10px;
+          border-bottom-right-radius: 0px;
+          margin-right: 0px;
+          font-size: 12px;
+          background-color: #F4F9FF;
+          display: flex !important;
+          justify-content: end !important;
+          text-align: start !important;
+      }
+
+
+      .rate-message {
+          padding: 10px;
+          border-radius: 10px;
+          margin-bottom: 10px;
+          color: #595E62;
+          display: flex;
+          align-items: end;
+          font-family: "Poppins", sans-serif;
+          display: flex;
+          flex-direction: column;
+          justify-content: start;
+          align-items: start;
+      }
+
+      .rate-message .messageWrapper div {
+          border: none;
+          border-radius: 8px;
+          max-width: 280px;
+          /* width: max-content; */
+          padding: 10px;
+          border-top-left-radius: 0px;
+          font-size: 12px;
+          background-color: #561f7a;
+          color: #fff !important;
+          display: flex;
+          flex-direction: column;
+          /* box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); */
+      }
+
+      .user-message .message-image {
+          display: none;
+      }
+
+      /* .user-message div p{
+    width: 100%;
+  } */
+      .user-message .messageWrapper {
+          padding-right: 10px;
+          text-align: end;
+          align-self: end !important;
+      }
+
+      .user-message .messageWrapper .botname-message {
+          padding-right: 10px;
+          text-align: end;
+          align-self: end !important;
+      }
+
+      .background {
+          background: transparent;
+      }
+
+      #response {
+          width: 100%;
+          padding: 0px;
+          background-color: #fff;
+          border-radius: 25px;
+          height: 350px;
+          overflow: auto;
+          position: relative;
+          font-family: "Poppins", sans-serif;
+          font-size: 12px;
+
+          /* Hide scrollbar for WebKit browsers */
+          scrollbar-width: none;
+          /* Firefox */
+          -ms-overflow-style: none;
+          /* Internet Explorer 10+ */
+      }
+
+      #response::-webkit-scrollbar {
+          display: none;
+      }
+
+      .message-image {
+          width: 30px;
+          height: 30px;
+          margin-right: 10px;
+          margin-top: 10px;
+          border-radius: 50%;
+      }
+
+      .chat-submit-button {
+          position: absolute;
+          right: 10px;
+          bottom: 10px;
+          background-color: transparent;
+          border-radius: 100%;
+          color: #561f7a;
+          /* color: #BFBFBF; */
+          padding: 10px;
+          font-size: 20px;
+          line-height: 20px;
+          font-family: "Poppins", sans-serif;
+          border: solid 1px #561f7a;
+      }
+
+      .chat-submit-button:hover {
+          background-color: transparent;
+      }
+
+      #questionForm {
+          position: relative;
+          padding: 10px;
+          padding-top: 0px;
+      }
+
+      .chat-header {
+          background-color: #561f7a;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+      }
+
+      .chat-container {
+          padding: 10px;
+      }
+
+      .chat-input {
+          line-height: 30px;
+          border-radius: 0px;
+          font-family: "Poppins", sans-serif;
+          font-size: 12px;
+          padding-right: 45px !important;
+          border: none !important;
+      }
+
+      .chat-input:focus {
+          outline: none !important;
+          box-shadow: none
+      }
+
+      .chat-input::placeholder {
+          font-family: "Poppins", sans-serif;
+          font-size: 12px;
+          color: #BFBFBF;
+      }
+
+      .language-buttons button {
+          font-family: "Poppins", sans-serif;
+          font-size: 12px;
+          border-radius: 15px;
+          background-color: #2a0e45;
+          border: none;
+          color: #fff;
+          width: 100%;
+          padding-top: 5px;
+          padding-bottom: 5px;
+      }
+
+      @media screen and (max-width: 600px) {
+          .background {
+              padding: 5px !important;
+              margin-top: 10px;
+          }
+
+          .container {
+              width: 100% !important;
+              margin: 10px;
+              position: relative !important;
+              border: none;
+              border-radius: 8px;
+              height: 99vh;
+          }
+
+          #response {
+              width: 100%;
+              height: calc(100svh - 220px) !important;
+          }
+
+          #questionForm {
+              position: relative;
+              bottom: 0;
+              width: 100%;
+              padding: 10px;
+              padding-top: 0px;
+          }
+      }
+
+      .closeButton {
+          background-color: transparent;
+          border: none;
+          border-radius: 100%;
+          font-size: 16px;
+          line-height: 16px;
+          width: 25px;
+          height: 25px;
+          color: #fff;
+          margin-right: 20px;
+          text-align: center;
+          padding: 0px;
+
+      }
+
+      @keyframes fadeIn {
+          0% {
+              opacity: 0;
+          }
+
+          50% {
+              opacity: 0.5;
+          }
+
+          100% {
+              opacity: 1;
+          }
+      }
+
+      @keyframes visible {
+          0% {
+              visibility: hidden;
+          }
+
+          100% {
+              visibility: visible;
+          }
+      }
+
+      .loading {
+          animation: fadeIn 0.5s ease-in-out infinite alternate, visible 0.5s ease-in-out infinite alternate;
+      }
+
+      .typingmsg-wrapper {
+          background-color: #fff;
+          color: #000;
+      }
+
+      .typing-msg {
+          color: #000;
+          font-size: 25px;
+          padding: 5px !important;
+      }
+
+      .error-message {
+          background-color: #2a0e459c;
+          color: #fff;
+          padding: 10px;
+          border-radius: 10px !important;
+          margin-top: 10px;
+      }
+
+
+      #questionButtons button {
+          margin-bottom: 10px;
+      }
+
+
+
+      .chatDetails p {
+          color: #fff;
+          font-weight: 600;
+          font-size: 18px;
+          font-family: "Poppins", sans-serif;
+      }
+
+      .chatDetails span {
+          color: #fff;
+          font-weight: 300;
+          font-size: 11px;
+          font-family: "Poppins", sans-serif;
+      }
+
+      .botname-message {
+          color: #BFBFBF;
+          font-weight: 400;
+          font-size: 10px;
+          font-family: "Poppins", sans-serif;
+      }
+
+      .quickQuestionButton {
+          background-color: #561f7a;
+          border-radius: 5px;
+          border: none;
+          color: #fff;
+          font-weight: 400;
+          font-size: 12px;
+          font-family: "Poppins", sans-serif;
+          padding: 8px;
+          text-align: start;
+      }
+
+      .quickQuestionButton i {
+          font-size: 20px;
+          padding-left: 10px;
+      }
+
+      .powerdTextBox {
+          background-color: #f7f7f7;
+          border-radius: 4px;
+      }
+
+      .powerdTextBox p {
+          color: #BFBFBF;
+          font-weight: 300;
+          font-size: 12px;
+          font-family: "Poppins", sans-serif;
+      }
+
+      .powerdTextBox span {
+          color: #561f7a;
+          font-weight: 600;
+      }
+
+      .liveagentBtn {
+          background-color: #fff;
+          border-radius: 5px;
+          border: none;
+          color: #561f7a;
+          font-weight: 400;
+          font-size: 12px;
+          font-family: "Poppins", sans-serif;
+          padding: 8px;
+          text-align: center;
+      }
+      .btnNotoClose, .btnYesToClose{
+          background-color: #561f7a;
+          border-radius: 5px;
+          border: none;
+          color: #fff;
+          font-weight: 400;
+          font-size: 12px;
+          font-family: "Poppins", sans-serif;
+          padding: 8px;
+          text-align: center;
+      }
+      .messageSubmitForm{
+
+      }
+      .star-rating-form{
+          width: 280px;
+          border: solid 1px #561f7a;
+      }
+      .rating-icon{
+          color: gold;
+      }
+  </style>
+  <!-- <style>
     .container {
       width: 360px;
       position: absolute;
@@ -254,38 +658,69 @@
       border-radius: 10px !important;
       margin-top: 10px;
     }
-  </style>
+  </style> -->
 </head>
 
 <body class="background">
-  <div class="container my-0 p-0">
-    <div class="d-flex chat-header w-100 py-2 text-center">
-      <!-- <img src="../Asset-1-2.png" alt="" class="px-3 py-2"> -->
-      <p class="text-white header-title px-3 mb-0">Raja jewellers</p>
-    </div>
-
-    <div class="d-flex chat-container">
-      <div id="response" class="">
-        <div class="d-flex justify-content-center align-items-center">
-          <img src="../Asset-1-2.png" alt="" class="px-3 py-2 mb-3">
-        </div>
-        <div class="bot-message"><img class="message-image" src="/chat-header.png">
-          <div>
-            <img src="../language-img.png" alt="" class="px-3 py-2 mb-3 img-fluid langImage">
-            <p class="mb-2">Hello, Welcome to Raja jewellers.</p>
-            <span id="questionButtons" class="d-flex flex-column language-buttons w-100 p-0 m-0">
-
-            </span>
-
+  <div class="container shadow-lg my-0 p-0">
+    <div class="d-flex chat-header w-100 py-2 text-center justify-content-between align-items-center">
+      <div class="d-flex flex-row">
+          <div class="d-flex ps-3 pe-2 py-1 position-relative">
+              <img src="/agent.png" alt="" class="" style="height: 60px; width: auto;">
+              <span class="position-absolute start-100 translate-middle p-1 rounded-circle"
+                  style="background-color: rgb(5, 233, 5); bottom: 0; margin-left: -20px !important;">
+                  <span class="visually-hidden">New alerts</span>
+              </span>
           </div>
-        </div>
+          <div class="d-flex flex-column chatDetails align-items-start justify-content-center">
+              <p class="mb-0">Raja jewellers Assistant</p>
+              <span class="mb-0">Online</span>
+          </div>
       </div>
+      <button class="closeButton"><i class="bi bi-x-lg"></i></button>
+  </div>
+
+  <div class="d-flex chat-container">
+    <div id="response" class="">
+        <div class="d-flex justify-content-center align-items-center">
+            <!-- <img src="../chat-logo.webp" alt="" class="px-3 py-2 mb-3"> -->
+        </div>
+        <div class="bot-message">
+            <img class="message-image" src="/agent.png">
+
+            <div class="messageWrapper">
+                <span class="botname-message" id="OpenedTime1">ChatBot</span>
+                <div>
+                    <p class="mb-0">Hi, How can I help you today!</p>
+                </div>
+            </div>
+        </div>
+        <div class="bot-message">
+            <img class="message-image" src="/agent.png">
+
+            <div class="messageWrapper">
+                <span class="botname-message" id="OpenedTime2"></span>
+                <div>
+                    <p class="mb-0">Here's few ways to start with us.</p>
+                </div>
+                <span id="questionButtons" class="d-flex flex-column w-100 p-0 m-0 mt-2">
+
+                </span>
+            </div>
+        </div>
     </div>
-    <form id="questionForm">
-      <input class="form-control chat-input" placeholder="What's your question about?" id="question" name="question"
+</div>
+<form id="questionForm" style="border-top: solid 1px #e0e0e0; padding-top: 10px;">
+    <input class="form-control chat-input" placeholder="Write message here..." id="question" name="question"
         required></input>
-      <button type="submit" class="btn btn-light btn-lg chat-submit-button"><i class="bi bi-send"></i></button>
-    </form>
+    <button type="submit" class="btn btn-light btn-lg chat-submit-button"><i
+            class="bi bi-send-fill"></i></button>
+</form>
+<div class="d-flex px-3 pt-0 pb-2 w-100 justify-content-center align-items-center">
+    <div class="d-flex flex-row py-2 powerdTextBox text-center w-100 justify-content-center align-items-center">
+        <p class="mb-0">Powered By : <span>KodeTech</span></p>
+    </div>
+</div>
   </div>
 
 
@@ -307,25 +742,49 @@
     var questionButtonsContainer = document.getElementById("questionButtons");
 
     quickQuestions.forEach(function (qa) {
-      var button = document.createElement("button");
-      button.textContent = qa.question;
-      button.addEventListener("click", function () {
+            var button = document.createElement("button");
+            button.classList.add('quickQuestionButton', 'my-1');
+            button.innerHTML = `
+        <span class="d-flex flex-row justify-content-between align-items-center"> 
+          <span>${qa.question}</span> 
+          <i class="bi bi-arrow-right-square-fill"></i>
+        </span>
+    `;
+    button.addEventListener("click", function () {
+                // Add the clicked question as a user message to the chat history
+                // chatHistory.push({ role: 'user', content: qa.question });
 
-        // Add the clicked question as a user message to the chat history
-        chatHistory.push({ role: 'quickQuestion', content: qa.question });
-
-        // Display the user's question
-        appendMessageToResponse('quickQuestion', qa.question);
-        // Display the corresponding answer
-        appendMessageToResponse('quickAnswer', qa.answer);
-      });
-      questionButtonsContainer.appendChild(button);
-    });
+                // Display the user's question
+                appendMessageToResponse('quickQuestion', qa.question);
+                // Display the corresponding answer
+                appendMessageToResponse('quickAnswer', qa.answer);
+            });
+            questionButtonsContainer.appendChild(button);
+        });
 // quick questions ============================================================
 
+function setFormattedOpenedTime() {
+    const OpenedTime = new Date();
+    let Opendhours = OpenedTime.getHours();
+    const Openedminutes = OpenedTime.getMinutes().toString().padStart(2, '0');
+    const Openedseconds = OpenedTime.getSeconds().toString().padStart(2, '0');
+    const Openedampm = Opendhours >= 12 ? 'PM' : 'AM';
+    Opendhours = Opendhours % 12;
+    Opendhours = Opendhours ? Opendhours : 12; // the hour '0' should be '12'
+    const formattedOpenedTime = `${Opendhours.toString().padStart(2, '0')}:${Openedminutes} ${Openedampm}`;
+
+    document.getElementById('OpenedTime2').textContent = formattedOpenedTime;
+}
+
+// Call the function to set the time
+setFormattedOpenedTime();
 
     let chatHistory = [];
 
+
+window.addEventListener("beforeunload", function (event) {
+    localStorage.removeItem("chatId");
+});
 
     // Function to append a typing animation message
     function showTypingAnimation() {
@@ -367,6 +826,16 @@
       const responseDiv = document.getElementById("response");
       const messageDiv = document.createElement("div");
 
+      const currentTime = new Date();
+    let hours = currentTime.getHours();
+    const minutes = currentTime.getMinutes().toString().padStart(2, '0');
+    const seconds = currentTime.getSeconds().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+
+
       // quick questions ============================================================
       if (role === 'quickQuestion') {
         messageDiv.classList.add("user-message"); // Apply user message style
@@ -382,7 +851,7 @@
       if (role === 'quickQuestion' || role === 'user') {
         image.src = "/user.webp"; // Set user image
       } else {
-        image.src = "/chat-header.png"; // Set bot image
+        image.src = "/agent.png"; // Set bot image
       }
 
       // Check if the content is a list
@@ -394,9 +863,22 @@
         const listItems = content.split('\n').map(item => {
           return `<li style="margin-bottom: 10px !important;">${item}</li>`;
         }).join('');
-        messageDiv.innerHTML = `<div><ul style="list-style: none; padding: 0px !important">${listItems}</ul></div>`;
+        messageDiv.innerHTML = `
+        <div class="messageWrapper">
+    <span class="botname-message">${formattedTime}</span>
+    <div>
+      <ul style="list-style: none; padding: 0px !important">${listItems}</ul>
+    </div>
+  </div>`;
       } else {
-        messageDiv.innerHTML = `<div>${content}</div>`;
+        messageDiv.innerHTML = `
+        <div class="messageWrapper">
+    <span class="botname-message">${formattedTime}</span>
+    <div class="d-flex flex-column">
+      <div>${content}</div>
+    </div>
+  </div>
+  `;
       }
 
       messageDiv.prepend(image);
