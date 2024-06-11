@@ -11,7 +11,7 @@ const pc = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
 
 export const editDocument = async (req: Request, res: Response) => {
     const id = req.query.id;
-    const index = pc.index("dfccchatbot")
+    const index = pc.index("botdb")
     const fetchResult = await index.namespace('raja-test-pdf-upload-new').fetch([`${id}`]);
     //console.log(fetchResult.records[`${id}`].metadata)
     const metadata = fetchResult.records[`${id}`].metadata;

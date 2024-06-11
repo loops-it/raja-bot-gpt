@@ -17,7 +17,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 // Define the uploadDocuments middleware
 export const updateDocuments = async (req: Request, res: Response, next: Function) => {
-    const index = pc.index("dfccchatbot")
+    const index = pc.index("botdb")
     let title = req.body.title;
     let id = req.body.id;
     let text = req.body.text;

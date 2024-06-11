@@ -11,7 +11,7 @@ if (!process.env.PINECONE_API_KEY || typeof process.env.PINECONE_API_KEY !== 'st
 const pc = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
 
 export const viewDocuments = async (req: Request, res: Response) => {
-    // const index = pc.index('dfccchatbot').namespace('dfcc-new-vectors');
+    // const index = pc.index('botdb').namespace('dfcc-new-vectors');
 
     // const results = await index.listPaginated();
     // console.log(results);
@@ -23,7 +23,7 @@ export const viewDocuments = async (req: Request, res: Response) => {
         try {
 
 
-            const index = pc.index('dfccchatbot');
+            const index = pc.index('botdb');
             const fileIds  = await File.findAll({
                 attributes: ['file_id']
               });

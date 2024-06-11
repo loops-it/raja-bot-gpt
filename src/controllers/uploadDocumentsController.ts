@@ -32,7 +32,7 @@ export const uploadDocuments = async (req: Request, res: Response, next: Functio
       const timestamp = new Date().getTime();
       const randomDigits = Math.floor(10000000 + Math.random() * 90000000);
       const uniqueId = `${timestamp}${randomDigits}`;
-      const index = pc.index("dfccchatbot")
+      const index = pc.index("botdb")
 
       if (!req.file) {
         const embedding = await openai.embeddings.create({
