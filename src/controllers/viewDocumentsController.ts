@@ -15,6 +15,7 @@ export const viewDocuments = async (req: Request, res: Response) => {
 
     // const results = await index.listPaginated();
     // console.log(results);
+    
 
     let chatHistory = req.body.messages || [];
 
